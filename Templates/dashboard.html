@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="styles.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://kit.fontawesome.com/274ee977b7.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+    <style>
+
+        /* Add custom styles here */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: whitesmoke;
+    }
+    .container1 {
+      margin-top: 130px;
+      margin-left: 205px;
+    }
+    .card {
+      margin-bottom: 20px;
+    }
+    .chart-container {
+      position: relative;
+      width: 80%;
+      margin: auto;
+    }
+    #archiveButton {
+      display: none; /* Initially hide the archiveButton */
+    }
+    .archive-card {
+      /* margin: 50px; */
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      /* width: 200px; */
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    }
+    .archive-card:hover {
+      border-color: #007bff;
+    }
+    .popup {
+      position: absolute;
+      border: 2px dotted #939393;
+      border-radius: 0.4rem;
+      background-color: rgb(7, 7, 7);
+      padding: 9px 20px;
+      display: none;
+    }
+        @media (min-width:992px) {    
+            .vertical-nav {
+                position: fixed;
+                top: 56px;
+                left: 0;
+                width: 200px;
+                height: 100%;
+                background-color: #f8f8f8;
+                overflow-y: auto;
+                padding-top: 30px
+              }
+              li{
+                border-bottom: 2px solid black;
+                
+              }
+              li:hover{
+                background-color: gray;
+                color: white;
+              }
+             .content{
+               margin-left:220px;
+               margin-top:60px;
+               overflow-x: hidden;
+             }
+             .align{
+              margin-left: 280px;
+             }
+          }
+
+          .navbar-brand{
+            font-family: cursive;
+            font-weight: bolder;
+            margin-left: 50px;
+
+          }
+          .head_sales {
+    margin-left: 23px;
+    font-weight: bolder;
+    margin-top: 100px;
+}
+.footer {
+  border-top: 3px solid darkblue;
+      background-color: rgb(208, 204, 204);
+      color: black;
+      padding: 10px 0;
+      font-weight: bolder;
+
+    }
+
+
+
+    .container7 {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    /* border: 1px solid #ccc; */
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+h1 {
+    text-align: center;
+}
+
+#salaryChart {
+    height: 400px;
+}
+
+    </style>
+</head>
+<body>
+  {% load static %}
+
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: rgb(1, 1, 73)">
+        <a class="navbar-brand" href="#" style="color: white;">CRM</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                  </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto flex-column vertical-nav " style="background-color:rgb(3, 3, 137)" >
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'index' %}">Home</a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link text-white" href="#">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'archive' %}">Archived</a>
+            </li>
+            
+            <li class="nav-item ">
+              <a class="nav-link text-white" href="{% url 'contact' %}">Contact </a>
+            </li>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'pricing' %}">Pricing</a>
+            </li>
+            
+          </ul>
+          
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'signup' %}" style="color: white; margin-right: 20px;">SignUp</a>
+            </li>
+            <!-- <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              User
+                              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Log Out</a>
+              </div>
+            </li> -->
+          </ul>
+      
+        </div>
+      </nav>
+
+      <div class="content">
+        <h2 class="head_sales" style="margin-left: 23px; font-weight: bolder;">Sales analytics</h2>
+          <div class="container5">
+    <div class="row px-4">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Total Customers</h5>
+            <p class="card-text">500</p>
+            <a href="#" class="btn" style="background-color: darkblue; color: white;">View Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Total Sales</h5>
+            <p class="card-text">$50,000</p>
+            <a href="#" class="btn" style="background-color: darkblue; color: white;">View Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Average Order Value</h5>
+            <p class="card-text">$100</p>
+            <a href="#" class="btn" style="background-color: darkblue; color: white;">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row px-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Recent Orders</h5>
+            <ul class="list-group">
+              <li class="list-group-item">Order #123 - $200</li>
+              <li class="list-group-item">Order #124 - $150</li>
+              <li class="list-group-item">Order #125 - $300</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Top Customers</h5>
+            <ul class="list-group">
+              <li class="list-group-item">Customer A - $5000</li>
+              <li class="list-group-item">Customer B - $4000</li>
+              <li class="list-group-item">Customer C - $3000</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mx-4">
+          <div class="card-body">
+            <h5 class="card-title">Sales Overview</h5>
+            <div class="chart-container">
+              <canvas id="salesChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      </div>
+
+<div class="content">
+      <section id="dashboard" class="dashboard">
+        <div class="container d-flex flex-column" style="background-color: white;">
+          <div>
+              <h1 class="mt-4" style="text-align: center; font-weight: bold;">Activity Overview</h1>
+          </div>
+          <div class="row" id="archive-container">
+          </div>
+        </div>
+        <div class="popup" id="popup">
+            <div class="popup-container">
+                <div class="text-center">
+                    <span><i class="fa-solid fa-file-export fs-1" style="color: rgb(241, 179, 62);"></i></span>
+                </div>
+                <p style="color: #007bff;">Drop here to archive</p>
+            </div>
+        </div>
+      </section>
+      </div>
+     
+
+      <script>
+        var salesData = {
+      labels: ["January", "February", "March", "April", "May", "June"],
+      datasets: [{
+        label: "Sales",
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+        data: [10000, 15000, 20000, 18000, 25000, 30000],
+      }]
+    };
+
+    // Chart initialization
+    var ctx = document.getElementById('salesChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: salesData,
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+
+    var qarchivedData = [
+  {
+    id:1,
+    period: 46,
+    cardText: "Created Leads",
+    percentage: "-33%",
+    viewiInDash: true
+  },
+  {
+    id: 2,
+    period: 30,
+    cardText: "Created Leads",
+    percentage: "-3%",
+    viewiInDash: true
+  },
+  {
+    id: 3,
+    period: 356,
+    cardText:"Created Leads",
+    percentage: "-23%",
+    viewiInDash: true
+  },
+  {
+    id: 4,
+    period: 235,
+    cardText:"Contacted Leads",
+    percentage: "3%",
+    viewiInDash: true
+  },
+  {
+    id: 5,
+    period: 139,
+    cardText:"Outbound Calls",
+    percentage: "19%",
+    viewiInDash: true
+  },
+  {
+    id: 6,
+    period: 23,
+    cardText:"Inbound Calls",
+    percentage: "35%",
+    viewiInDash: true
+  },
+  {
+    id: 7,
+    period: 541,
+    cardText:"All Calls",
+    percentage: "-23%",
+    viewiInDash: true
+  },
+  {
+    id: 8,
+    period: 43,
+    cardText:"Outbound Calls",
+    percentage: "-23%",
+    viewiInDash: true
+  },
+  
+];
+var selectedArchive;
+var localStorageArchiveData = JSON.parse(localStorage.getItem('archivedCard'));
+if(!localStorageArchiveData){
+  localStorage.setItem('archivedCard', JSON.stringify(qarchivedData));
+} else {
+  qarchivedData = localStorageArchiveData;
+}
+var container = document.getElementById('archive-container');
+var popup = document.getElementById('popup');
+createArchiveCard();
+function createArchiveCard(){
+    container.innerHTML = `<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 pb-4 d-none col-card-view" id="card1">
+                                <div class="archive-card"  style="background-color: aliceblue;" >
+                                    <div class="card-body text-center" style="font-weight: bolder;">
+                                        <h4 class="card-price" style="color: blue;"><span class="period" style="font-size: 40px;"></span></h4>
+                                        <p class="card-text"></p>
+                                        <ul class="list-unstyled">
+                                            <li class="farrow-down"><i class="fa-solid fa-arrow-down"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                          </div>`;
+    qarchivedData.forEach(function(item, index) {
+  var cardClone = document.querySelector('#card1').cloneNode(true);
+  if(item?.viewiInDash){
+    cardClone.style.setProperty('display', 'block', 'important');
+    cardClone.querySelector('.period').textContent = item.period;
+    cardClone.querySelector('.card-text').textContent = item.cardText;
+    var percentageLi = cardClone.querySelector('.farrow-down');
+    if (percentageLi) {
+      percentageLi.textContent = item.percentage;
+    }
+    cardClone.draggable = true;
+    cardClone.addEventListener('dragstart', function(event) {
+      event.dataTransfer.setData('text/plain', JSON.stringify(item));
+    });
+    container.appendChild(cardClone);
+  }
+});
+}
+
+popup.addEventListener('dragover', function(event) {
+  event.preventDefault();
+});
+container.addEventListener('dragend', function(event) {
+  event.preventDefault();
+  popup.style.display = 'none';
+});
+
+popup.addEventListener('drop', function(event) {
+  event.preventDefault();
+  var selectedArchive = JSON.parse(event.dataTransfer.getData('text/plain'));
+  qarchivedData?.forEach((x)=> {
+    if(x?.id == selectedArchive?.id){
+      x.viewiInDash = false;
+    }
+  });
+  localStorage.setItem('archivedCard', JSON.stringify(qarchivedData));
+  createArchiveCard();
+  popup.style.display = 'none';
+});
+
+container.addEventListener('dragstart', function(event) {
+  selectedArchive = JSON.parse(event.dataTransfer.getData('text/plain'));
+  var rect = event.target.getBoundingClientRect();
+  var popupTop = rect.top + window.scrollY - 118;
+  var popupLeft = rect.left + window.scrollX + rect.width - 311;
+  popup.style.top = popupTop + 'px';
+  popup.style.left = popupLeft + 'px';
+  popup.style.display = 'block';
+});
+    
+
+      </script>
+
+<section>
+  <div class="container7">
+      <h1>Employee Salary Status</h1>
+      <div id="salaryChart"></div>
+  </div>
+  </section>
+  
+  <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1/dist/frappe-charts.min.iife.js"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+  // Dummy data for employee salary status
+  const employeeSalaryData = {
+      labels: ["John", "Alice", "Bob", "Emily", "Tom"],
+      datasets: [
+          {
+              name: "Salary",
+              values: [50000, 60000, 55000, 70000, 48000]
+          }
+      ]
+  };
+  
+  // Initialize Frappé Chart
+  const chart = new frappe.Chart("#salaryChart", {
+      title: "Employee Salary Status",
+      data: employeeSalaryData,
+      type: 'bar',
+      height: 300,
+      colors: ['#7cd6fd'],
+      axisOptions: {
+          xAxisMode: 'tick',
+          yAxisMode: 'span',
+          xIsSeries: true
+      }
+  });
+  });
+  </script>
+
+      <footer class="footer">
+        <div class="container">
+          <div class="row">
+            <!-- <div class="col-md-6">
+              <p>&copy; 2024 CRM Dashboard. All rights reserved.</p>
+            </div> -->
+            <div class="col-md-6">
+              <p class="text-md-right">@ CRM </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+
+</body>
+</html>
